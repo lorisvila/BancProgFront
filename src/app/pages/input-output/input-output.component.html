@@ -1,0 +1,104 @@
+<wcs-action-bar gutter="true">
+	Entrées MESD
+	<div slot="actions">
+		<wcs-button class="wcs-success" mode="stroked" size="l" (click)="MainService.refreshData()">
+      <wcs-mat-icon icon="refresh"></wcs-mat-icon>
+      Rafraîchir
+    </wcs-button>
+	</div>
+</wcs-action-bar>
+<main>
+  <wcs-tabs align="" [selectedKey]="selectedTabFromUrl" (tabChange)="changeUrlToTab($event)">
+
+    <!--Tab commandes simplifiées-->
+    <wcs-tab header="Commandes simplifiées" item-key="SimpleCommands">
+      <div class="tab-content">
+        <wcs-card>
+          <wcs-card-body class="card-header">
+            <wcs-mat-icon icon="monitor_heart"></wcs-mat-icon>
+            <h2>Etats</h2>
+            <wcs-spinner *ngIf="MainService.refreshing.actualEtats"></wcs-spinner>
+          </wcs-card-body>
+          <wcs-divider></wcs-divider>
+          <wcs-card-body>
+            <table *ngIf="MainService.actualEtats">
+              <thead>
+              <th>Nom de l'état</th>
+              <th>Valeur de l'état</th>
+              </thead>
+              <tr *ngFor="let etat of MainService.actualEtats">
+                <td>{{etat.category}}</td>
+                <td>{{etat.actualState.name}}</td>
+              </tr>
+            </table>
+            <wcs-badge *ngIf="!MainService.actualEtats" class="wcs-danger">Les états n'ont pas pu être chargés</wcs-badge>
+          </wcs-card-body>
+        </wcs-card>
+        <wcs-card>
+          <wcs-card-body class="card-header">
+            <wcs-mat-icon icon="terminal"></wcs-mat-icon>
+            <h2>Commandes</h2>
+            <wcs-spinner *ngIf="MainService.refreshing.commandsAvailable"></wcs-spinner>
+          </wcs-card-body>
+          <wcs-divider></wcs-divider>
+          <wcs-card-body>
+            <div class="flex-colum">
+              <wcs-button class="wcs-primary" *ngFor="let command of this.MainService.commandsAvailable"
+                          (click)="CommandsService.sendSimpleCommand(command.shortName, $event)">{{command.Name}}</wcs-button>
+            </div>
+            <wcs-badge *ngIf="!MainService.commandsAvailable" class="wcs-danger">Les commandes n'ont pas pu être chargés</wcs-badge>
+          </wcs-card-body>
+        </wcs-card>
+      </div>
+    </wcs-tab>
+
+    <!--Tab commandes par carte-->
+    <wcs-tab header="Commandes par carte" item-key="CardsCommands">
+      <div class="tab-content">
+        <wcs-card>
+          <wcs-card-body class="card-header">
+            <wcs-mat-icon icon="memory"></wcs-mat-icon>
+            <h2>Gestion des cartes</h2>
+            <wcs-spinner *ngIf="MainService.refreshing.commandsAvailable"></wcs-spinner>
+          </wcs-card-body>
+
+          <wcs-divider></wcs-divider>
+
+          <wcs-card-body>
+            <wcs-radio-group [value]="CommandsService.cardStringSelected"  mode="option" (wcsChange)="CommandsService.changeSelectedCard($event)" #radioChangeCard>
+              <wcs-radio *ngFor="let card of MainService.bancCards" [label]="card.cardName" [name]="card.cardName" [value]="card.cardName"></wcs-radio>
+            </wcs-radio-group>
+          </wcs-card-body>
+
+          <ng-container *ngIf="CommandsService.cardSelected">
+            <wcs-divider></wcs-divider>
+            <wcs-card-body>
+              <wcs-grid id="grid-commande-carte" selection-config="none"
+                        [data]="CommandsService.cardSelected.pins" row-id-path="NumberOnCard">
+                <wcs-grid-column name="Nom" id="PinName" path="PinName" sort=""></wcs-grid-column>
+                <wcs-grid-column name="Numéro" id="NumberOnCard" path="NumberOnCard" sort=""></wcs-grid-column>
+                <wcs-grid-column name="Etat" id="state" custom-cells="true"></wcs-grid-column>
+                <wcs-grid-column name="Commande" id="command" custom-cells="true"></wcs-grid-column>
+
+                <wcs-grid-custom-cell column-Id="state" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">
+                  <wcs-badge *ngIf="pin.state" class="wcs-success">1</wcs-badge>
+                  <wcs-badge *ngIf="!pin.state" class="wcs-warning">0</wcs-badge>
+                </wcs-grid-custom-cell>
+
+                <wcs-grid-custom-cell column-Id="command" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">
+                  <wcs-switch name="switch-id" label-alignment="center" [checked]="pin.state"
+                              (click)="CommandsService.sendCardPinToggle(pin.NumberOnCard, $event)"></wcs-switch>
+                </wcs-grid-custom-cell>
+              </wcs-grid>
+            </wcs-card-body>
+          </ng-container>
+        </wcs-card>
+      </div>
+    </wcs-tab>
+
+    <wcs-tab header="Commandes expert" item-key="ExpertCommands">
+
+    </wcs-tab>
+  </wcs-tabs>
+
+</main>

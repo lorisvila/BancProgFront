@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~wcs-core/dist/wcs/wcs.css';
+
+body {
+  margin: 0;
+}
+
+@font-face {
+  font-family: Avenir;
+  src: url("assets/fonts/avenir-lighter.woff");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Avenir;
+  src: url("assets/fonts/avenir-book.woff");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Avenir;
+  src: url("assets/fonts/avenir-medium.woff");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Avenir;
+  src: url("assets/fonts/avenir-black.woff");
+  font-weight: 900;
+}
+
+// Examples for class passed in template option of formly radio
+.value1 {
+  --wcs-primary: var(--wcs-green);
+}
+
+.value2 {
+  --wcs-primary: var(--wcs-orange);
+}
+
+.value3 {
+  --wcs-primary: var(--wcs-red);
+}
+
+.formly-group-flex-col-with-gap {
+  display: flex;
+  flex-direction: column;
+  row-gap: calc(var(--wcs-base-margin) * 2);
+}
+
+.grid-auto-column {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+
+.column-gap-x-2 {
+  column-gap: calc(var(--wcs-base-margin) * 2);
+}
