@@ -7,7 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WcsAngularModule } from 'wcs-angular';
 import { FormlyModule } from '@ngx-formly/core';
 import { WcsFormlyModule } from 'wcs-formly';
-import { AccueilComponent } from './pages/accueil/accueil.component';
 import { InputOutputComponent } from './pages/input-output/input-output.component';
 import { NetworkingComponent } from './pages/networking/networking.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -17,7 +16,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
-    AccueilComponent,
     InputOutputComponent,
     NetworkingComponent
   ],

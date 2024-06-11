@@ -34,6 +34,13 @@ export type Pinout = {
 	IODIR_register_address_HEX: string // HEX value "0x2F" stored as a string --> so you need to parseInt
 	register_number: number
 }
+export type AppModulePin = {
+  module: number,
+  pin: number,
+  state: number,
+  GPIO_register: string
+  IODIR_register: string
+}
 
 // Scripting Side
 
@@ -70,6 +77,7 @@ export type CommandeCondition = {
 
 export type ConfigNetworking = {
 	name: string
+  des: string
 	quantity: number
 	addresses: DeviceNetworkParams[]
 }

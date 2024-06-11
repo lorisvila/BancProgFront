@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {MainService} from '../../services/main.service';
+import {NetworkingService} from '../../services/networking.service';
 
 @Component({
   selector: 'app-networking',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NetworkingComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public MainService: MainService,
+    public NetworkingService: NetworkingService,
+  ) { }
 
   ngOnInit(): void {
   }
-
 }

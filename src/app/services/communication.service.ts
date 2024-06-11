@@ -13,6 +13,7 @@ export class CommunicationService {
 	API_Base_Commands: string = "/api/v1/commands"
 	API_Base_General: string = "/api/v1"
   API_Base_GPIO: string = '/api/v1/gpio'
+  API_Base_Network: string = '/api/v1/network/'
 
 	API_Commands_GetAvailableCommands: URL = new URL(this.API_Base_Commands + "/getAvailableCommands", this.API_Address)
 	API_Commands_GetAllCommands: URL = new URL(this.API_Base_Commands + "/getAllCommands", this.API_Address)
@@ -25,8 +26,13 @@ export class CommunicationService {
 	API_General_GetConfig: URL = new URL(this.API_Base_General + '/getConfig/{configName}', this.API_Address)
 	API_General_GetCurrentConfig: URL = new URL(this.API_Base_General + '/getCurrentConfig', this.API_Address)
 
-  API_GPIO_ReadAllCards = new URL(this.API_Base_GPIO + "/readAllCards", this.API_Address)
-  API_GPIO_WriteToCard = new URL(this.API_Base_GPIO + "/write/$card/$numberOnCard/$state", this.API_Address)
+  API_GPIO_ReadAllCards: URL = new URL(this.API_Base_GPIO + "/readAllCards", this.API_Address)
+  API_GPIO_WriteToCard: URL = new URL(this.API_Base_GPIO + "/write/$card/$numberOnCard/$state", this.API_Address)
+  API_GPIO_ReadAllModules: URL = new URL(this.API_Base_GPIO + "/readAllModules", this.API_Address)
+  API_GPIO_GetPinout: URL = new URL(this.API_Base_GPIO + "/getPinout", this.API_Address)
+  API_GPIO_WriteToModule: URL = new URL(this.API_Base_GPIO + "/writeModule/$module/$pin/$state", this.API_Address)
+
+  API_Network_NetworkDervicesStatus: URL = new URL(this.API_Base_Network + '/networkDevicesStatus', this.API_Address)
 
 	constructor(
 		public http: HttpClient,

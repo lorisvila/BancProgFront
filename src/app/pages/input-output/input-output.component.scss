@@ -21,6 +21,19 @@
   gap: 1em;
 }
 h2 {
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
+  margin: 0.3em 0;
+}
+.table-etats {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5em
+}
+.table-etats-line {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1em;
+}
+.table-etats-name {
+  font-weight: 500;
+  min-width: 20%;
 }

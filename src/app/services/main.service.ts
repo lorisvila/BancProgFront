@@ -1,10 +1,9 @@
 import {ElementRef, EventEmitter, Injectable, ViewChild} from '@angular/core';
-import {API_ResponseType, BancConfig, Card, Commande, Etat} from '../types';
+import {API_ResponseType, BancConfig, Card, Commande, ConfigNetworking, DeviceNetworkParams, Etat, GPIOModule, Pinout} from '../types';
 import {CommunicationService} from './communication.service';
 import {ToastrService} from 'ngx-toastr';
-import {ActivatedRoute, Route, Router} from '@angular/router';
-import {WcsRadioGroup} from 'wcs-angular';
-import {RadioGroup} from 'wcs-core/dist/types/components/radio-group/radio-group';
+import {Router} from '@angular/router';
+import {NetworkingComponent} from '../pages/networking/networking.component';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +18,9 @@ export class MainService {
 	actualEtats: Etat[]
 	commandsAvailable: Commande[]
   bancCards: Card[]
+  bancModules: GPIOModule[]
+  bancPinout: Pinout[]
+  networkDevices: ConfigNetworking[]
 
   refreshing: {
     bancConfigurations: boolean,
@@ -26,13 +28,21 @@ export class MainService {
     actualEtats: boolean,
     commandsAvailable: boolean,
     bancCards: boolean,
+    bancModules: boolean,
+    bancPinout: boolean,
+    networkDevices: boolean,
   } = {
     bancConfigurations: false,
     actualBancConfiguration: false,
     actualEtats: false,
     commandsAvailable: false,
     bancCards: false,
+    bancModules: false,
+    bancPinout: false,
+    networkDevices: false,
   }
+
+  finishedRefreshing: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
 	  private communicationService: CommunicationService,
@@ -42,18 +52,23 @@ export class MainService {
     this.refreshData()
   }
 
+  fullRefreshData() {
+
+  }
 
   refreshData() {
 
     this.refreshing.bancConfigurations = true
 	  this.communicationService.requestToAPI(this.communicationService.API_General_GetAllConfigs).subscribe(
 		  response => {
-			  this.bancConfigurations = (response as API_ResponseType).data as BancConfig[]
         this.refreshing.bancConfigurations = false
+			  this.bancConfigurations = (response as API_ResponseType).data as BancConfig[]
+        this.checkIfFinishedLoadingData()
 		  }, error => {
         this.refreshing.bancConfigurations = false
-			  let API_Message = error.error as API_ResponseType
-			  this.notif.error(API_Message.status.message, "Aïe")
+        this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
+
 		  }
 	  )
 
@@ -62,9 +77,11 @@ export class MainService {
 		  response => {
         this.refreshing.actualBancConfiguration = false
 			  this.actualBancConfiguration = (response as API_ResponseType).data as BancConfig
+        this.checkIfFinishedLoadingData()
 		  }, error => {
         this.refreshing.actualBancConfiguration = false
         this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
 		  }
 	  )
 
@@ -73,9 +90,11 @@ export class MainService {
 		  response => {
         this.refreshing.actualEtats = false
 			  this.actualEtats = (response as API_ResponseType).data as Etat[]
+        this.checkIfFinishedLoadingData()
 		  }, error => {
         this.refreshing.actualEtats = false
         this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
 		  }
 	  )
 
@@ -84,9 +103,11 @@ export class MainService {
 		  response => {
         this.refreshing.commandsAvailable = false
 			  this.commandsAvailable = (response as API_ResponseType).data as Commande[]
+        this.checkIfFinishedLoadingData()
 		  }, error => {
         this.refreshing.commandsAvailable = false
         this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
 		  }
 	  )
 
@@ -95,12 +116,63 @@ export class MainService {
       response => {
         this.refreshing.bancCards = false
         this.bancCards = (response as API_ResponseType).data as Card[]
+        this.checkIfFinishedLoadingData()
       }, error => {
         this.refreshing.bancCards = false
         this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
       }
     )
 
+    this.refreshing.bancModules = true
+    this.communicationService.requestToAPI(this.communicationService.API_GPIO_ReadAllModules).subscribe(
+      response => {
+        this.refreshing.bancModules = false
+        this.bancModules = (response as API_ResponseType).data as GPIOModule[]
+        this.checkIfFinishedLoadingData()
+      }, error => {
+        this.refreshing.bancModules = false
+        this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
+      }
+    )
+
+    this.refreshing.bancPinout = true
+    this.communicationService.requestToAPI(this.communicationService.API_GPIO_GetPinout).subscribe(
+      response => {
+        this.refreshing.bancPinout = false
+        this.bancPinout = (response as API_ResponseType).data as Pinout[]
+        this.checkIfFinishedLoadingData()
+      }, error => {
+        this.refreshing.bancPinout = false
+        this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
+      }
+    )
+
+    this.refreshing.networkDevices = true
+    this.communicationService.requestToAPI(this.communicationService.API_Network_NetworkDervicesStatus).subscribe(
+      response => {
+        this.refreshing.networkDevices = false
+        this.networkDevices = (response as API_ResponseType).data as ConfigNetworking[]
+        this.checkIfFinishedLoadingData()
+      }, error => {
+        this.refreshing.networkDevices = false
+        this.communicationService.handleError(error)
+        this.checkIfFinishedLoadingData()
+      }
+    )
+
+  }
+
+  checkIfFinishedLoadingData() {
+    for (let itemId in this.refreshing) {
+      let item = this.refreshing[itemId]
+      if (item == true) {
+        return
+      }
+    }
+    this.finishedRefreshing.emit(true)
   }
 
 }

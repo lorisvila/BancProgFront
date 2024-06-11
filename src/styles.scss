@@ -29,19 +29,6 @@ body {
   font-weight: 900;
 }
 
-// Examples for class passed in template option of formly radio
-.value1 {
-  --wcs-primary: var(--wcs-green);
-}
-
-.value2 {
-  --wcs-primary: var(--wcs-orange);
-}
-
-.value3 {
-  --wcs-primary: var(--wcs-red);
-}
-
 .formly-group-flex-col-with-gap {
   display: flex;
   flex-direction: column;
@@ -56,4 +43,8 @@ body {
 
 .column-gap-x-2 {
   column-gap: calc(var(--wcs-base-margin) * 2);
+}
+
+wcs-mat-icon {
+  user-select: none;
 }

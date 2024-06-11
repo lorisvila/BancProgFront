@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { WcsTabChangeEvent } from 'wcs-core';
-import {CommunicationService} from './services/communication.service';
 import {MainService} from './services/main.service';
 
 @Component({
@@ -40,10 +38,19 @@ import {MainService} from './services/main.service';
     }
     :host {
       display: grid;
-      grid-template-areas: "header header" "nav content";
       grid-template-columns: auto 1fr;
       height: 100vh;
       overflow-y: hidden;
+    }
+    @media screen and (min-width: 1200px) {
+      :host {
+        grid-template-areas: "header header" "nav content";
+      }
+    }
+    @media screen and (max-width: 1199px) {
+      :host {
+        grid-template-areas: "header header" "nav content";
+      }
     }
     main {
       grid-area: content;
@@ -65,7 +72,6 @@ import {MainService} from './services/main.service';
 export class AppComponent {
 
 	constructor(
-		public CommunicationService: CommunicationService,
 		public MainService: MainService
 	) {
 	}
