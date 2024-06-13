@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {MainService} from '../../services/main.service';
 import {CommandsService} from '../../services/commands.service';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {RadioGroupChangeEventDetail} from 'wcs-core';
 import {Card, GPIOModule} from '../../types';
 
@@ -23,11 +23,18 @@ export class InputOutputComponent {
     this.route.fragment.subscribe(fragment => {
       this.selectedTabFromUrl = fragment
     })
-    this.MainService.finishedRefreshing.subscribe(value => {
+    this.MainService.refreshed.subscribe(() => {
       if (!this.CommandsService.cardSelected) {
         this.route.queryParams.subscribe(params => {
           if (params['card']) {
             this.CommandsService.changeSelectedCardFromString(params['card'])
+          }
+        });
+      }
+      if (!this.CommandsService.moduleSelected) {
+        this.route.queryParams.subscribe(params => {
+          if (params['module']) {
+            this.CommandsService.changeSelectedModuleFromString(params['module'])
           }
         });
       }

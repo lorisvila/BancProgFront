@@ -18,8 +18,8 @@ export class NetworkingService {
 
   openDeviceModal(deviceGroup: ConfigNetworking, device: DeviceNetworkParams) {
     this.dataModalDeviceInformations = [
-      {name: 'Type', value: deviceGroup.name},
-      {name: 'Désignation', value: deviceGroup.des},
+      {name: 'Nom', value: device.name},
+      {name: 'Type', value: deviceGroup.des},
       {name: 'Addresse IP', value: device.IP},
       {name: 'Masque', value: device.SubnetMask},
       {name: 'Communique ?', value: device.IsAlive ? 'Oui' : 'Non'},

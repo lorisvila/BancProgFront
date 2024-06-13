@@ -1,7 +1,7 @@
 <wcs-action-bar gutter="true">
 	Entrées MESD
 	<div slot="actions">
-    <wcs-button shape="round" size="l" class="wcs-warning" (click)="MainService.refreshData()">
+    <wcs-button shape="round" size="l" class="wcs-warning" (click)="MainService.totalRefreshData()">
       <wcs-mat-icon icon="autorenew"></wcs-mat-icon>
     </wcs-button>
 	</div>
@@ -16,7 +16,6 @@
           <wcs-card-body class="card-header">
             <wcs-mat-icon icon="monitor_heart"></wcs-mat-icon>
             <h2>Etats</h2>
-            <wcs-spinner *ngIf="MainService.refreshing.actualEtats"></wcs-spinner>
           </wcs-card-body>
           <wcs-divider></wcs-divider>
           <wcs-card-body>
@@ -43,7 +42,6 @@
           <wcs-card-body class="card-header">
             <wcs-mat-icon icon="terminal"></wcs-mat-icon>
             <h2>Commandes</h2>
-            <wcs-spinner *ngIf="MainService.refreshing.commandsAvailable"></wcs-spinner>
           </wcs-card-body>
           <wcs-divider></wcs-divider>
           <wcs-card-body>
@@ -100,7 +98,7 @@
 
                 <wcs-grid-custom-cell column-Id="command-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">
                   <wcs-switch name="switch-id" label-alignment="center" [checked]="pin.state"
-                              (click)="CommandsService.sendCardPinToggle(pin.NumberOnCard, $event)"></wcs-switch>
+                              (wcsChange)="CommandsService.sendCardPinToggle(pin.NumberOnCard, $event)"></wcs-switch>
                 </wcs-grid-custom-cell>
               </wcs-grid>
             </wcs-card-body>
@@ -121,8 +119,8 @@
 
           <wcs-card-body>
             <ng-container *ngIf="MainService.bancModules">
-              <wcs-radio-group [value]="CommandsService.moduleStringSelected" mode="option"
-                             (wcsChange)="changeSelectedModuleFromEvent($event)">
+              <wcs-radio-group [value]="CommandsService.moduleNumberSelected" mode="option"
+                               (wcsChange)="changeSelectedModuleFromEvent($event)">
                 <wcs-radio *ngFor="let card of MainService.bancModules; trackBy: trackModule"
                            [label]="card.API_Address" [name]="card.API_Address" [value]="card.API_Address" mode="option"></wcs-radio>
               </wcs-radio-group>
@@ -158,7 +156,7 @@
                 <wcs-grid-custom-cell column-Id="commands-module" [rowId]="pin.pin" *ngFor="let pin of CommandsService.compiledModuleData"
                                       style="display: flex; flex-flow: row wrap; gap: 1em">
                   <wcs-switch name="switch-id" label-alignment="center" [checked]="pin.state"
-                              (click)="CommandsService.sendModulePinToggle(pin.pin, $event)"></wcs-switch>
+                              (wcsChange)="CommandsService.sendModulePinToggle(pin.pin, $event)"></wcs-switch>
                 </wcs-grid-custom-cell>
               </wcs-grid>
             </wcs-card-body>

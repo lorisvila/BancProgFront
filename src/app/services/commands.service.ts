@@ -15,7 +15,7 @@ export class CommandsService {
   cardStringSelected: string = ""
   cardSelected: Card | undefined = undefined
 
-  moduleStringSelected: string = ""
+  moduleNumberSelected: number = undefined
   moduleSelected: GPIOModule | undefined = undefined
 
   compiledModuleData: AppModulePin[]
@@ -24,23 +24,27 @@ export class CommandsService {
 	  public CommunicationService: CommunicationService,
 	  public MainService: MainService,
     public notif: ToastrService
-  ) { }
+  ) {
+    this.MainService.valuesUpdated.subscribe(dataName => {
+      if (dataName == 'allCards') {
+        this.updateSelectedCard()
+      }
+      if (dataName == 'allModules') {
+        this.updateSelectedModule()
+      }
+    })
+  }
 
 	sendSimpleCommand(commandName: string, event: any) {
     let buttonComponent = (event as PointerEvent).target as unknown as WcsButton
     buttonComponent.loading = true
     buttonComponent.disabled = true
-    let url = new URL(this.CommunicationService.API_Commands_SendCommand.href.replace('$commandName', commandName))
-    this.CommunicationService.requestToAPI(url).subscribe(
-      response => {
-        setTimeout(() => {
-          this.MainService.refreshData();
-        }, 1500)
-      }, error => {
-        this.CommunicationService.handleError(error)
-      }
-    )
+    this.CommunicationService.wsRequestToAPI(['sendCommand'], {options: {sendCommand: {commandName: commandName}}})
 	}
+
+  updateSelectedCard() {
+    this.cardSelected = this.MainService.bancCards.find(card => card.cardName == this.cardStringSelected)
+  }
 
   changeSelectedCardFromString(cardName: string) {
     let foundCard: Card | undefined = this.MainService.bancCards.find(card => card.cardName == cardName)
@@ -62,14 +66,27 @@ export class CommandsService {
     this.cardSelected = foundCard
   }
 
+  changeSelectedModuleFromString(moduleId: number | string) {
+    moduleId = typeof moduleId === 'string' ? parseInt(moduleId) : moduleId
+    let foundModule: GPIOModule | undefined = this.MainService.bancModules.find(module => module.API_Address == moduleId)
+    if (!foundModule) {
+      this.notif.error("Le module demandé n'a pas été trouvée... Bizzare", 'Aïe')
+      return
+    }
+    this.moduleSelected = foundModule
+    this.moduleNumberSelected = moduleId
+    this.updateCompiledModuleData()
+  }
+
   changeSelectedModuleFromEvent(event: any) {
     let value = ((event as CustomEvent).detail as RadioGroupChangeEventDetail).value
     if (Number.isNaN(value)) {
       this.notif.error("La carte demandée n'est pas valide...")
       return;
     }
-    this.moduleStringSelected = value
-    let foundModule: GPIOModule | undefined = this.MainService.bancModules.find(card => card.API_Address == parseInt(this.moduleStringSelected))
+    console.log(typeof value)
+    this.moduleNumberSelected = value
+    let foundModule: GPIOModule | undefined = this.MainService.bancModules.find(card => card.API_Address == this.moduleNumberSelected)
     if (!foundModule) {
       this.notif.error("La carte demandé n'a pas été trouvée... Bizzare", 'Aïe')
       return
@@ -78,14 +95,18 @@ export class CommandsService {
     this.updateCompiledModuleData()
   }
 
+  updateSelectedModule() {
+    this.moduleSelected = this.MainService.bancModules.find(module => module.API_Address == this.moduleNumberSelected)
+    this.updateCompiledModuleData()
+  }
+
   updateCompiledModuleData() {
-    this.compiledModuleData = [];
+    let newCompiledModuleData = []
     for (let registerPinGroupId in  this.MainService.bancPinout) {
       let registerPinGroup: Pinout = this.MainService.bancPinout[registerPinGroupId]
       for (let pinId in registerPinGroup.pins) {
         let pin: number = registerPinGroup.pins[pinId];
-        console.log(registerPinGroup)
-        this.compiledModuleData.push({
+        newCompiledModuleData.push({
           pin: pin,
           module: this.moduleSelected.API_Address,
           state: (this.moduleSelected.registers[registerPinGroup.register_number] >> registerPinGroup.pins.indexOf(pin)) & 0x1,
@@ -94,40 +115,33 @@ export class CommandsService {
         })
       }
     }
+    this.compiledModuleData = newCompiledModuleData;
   }
 
-  sendCardPinToggle(NumberOnCard: string, event: any) {
-    let state: boolean = !((event as PointerEvent).target as unknown as WcsSwitch).checked
-    let url: URL = new URL(this.CommunicationService.API_GPIO_WriteToCard.href
-      .replace('$card', this.cardSelected.cardName)
-      .replace('$numberOnCard', NumberOnCard)
-      .replace('$state', state.toString()));
-    this.CommunicationService.requestToAPI(url).subscribe(
-      response => {
-        setTimeout(() => {
-          this.MainService.refreshData();
-        }, 1500)
-      }, error => {
-        this.CommunicationService.handleError(error)
+  sendCardPinToggle(numberOnCard: string, event: any) {
+    let state: boolean = ((event as PointerEvent).target as unknown as WcsSwitch).checked
+    this.CommunicationService.wsRequestToAPI(['writeToCard'], {
+      options: {
+        writeToCard: {
+          cardName: this.cardStringSelected,
+          numberOnCard: numberOnCard,
+          state: state
+        }
       }
-    )
+    })
   }
 
   sendModulePinToggle(pin: number, event: any) { // TODO : Add the write to module function
-    let state: boolean = !((event as PointerEvent).target as unknown as WcsSwitch).checked
-    let url: URL = new URL(this.CommunicationService.API_GPIO_WriteToModule.href
-      .replace('$module', this.moduleSelected.API_Address.toString())
-      .replace('$pin', pin.toString())
-      .replace('$state', state.toString()));
-    this.CommunicationService.requestToAPI(url).subscribe(
-      response => {
-        setTimeout(() => {
-          this.MainService.refreshData();
-        }, 1500)
-      }, error => {
-        this.CommunicationService.handleError(error)
+    let state: boolean = ((event as PointerEvent).target as unknown as WcsSwitch).checked
+    this.CommunicationService.wsRequestToAPI(['writeToModule'], {
+      options: {
+        writeToModule: {
+          module: this.moduleNumberSelected,
+          pin: pin,
+          state: state
+        }
       }
-    )
+    })
   }
 
 }

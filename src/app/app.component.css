@@ -1,0 +1,51 @@
+#config_select {
+  min-width: 15em;
+}
+:host {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  height: 100vh;
+  overflow-y: hidden;
+}
+@media screen and (min-width: 1200px) {
+  :host {
+    grid-template-areas: "header header" "nav content";
+  }
+}
+@media screen and (max-width: 1199px) {
+  :host {
+    grid-template-areas: "header header" "nav content";
+  }
+}
+main {
+  grid-area: content;
+  padding: 16px;
+  overflow-y: auto;
+  height: calc(100vh - 64px - 16px - 16px);
+}
+wcs-nav {
+  grid-area: nav;
+}
+wcs-header {
+  grid-area: header;
+}
+img {
+  cursor: pointer;
+}
+.actions-div {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.75em;
+}
+.disconnected-badge {
+  cursor: pointer;
+  user-select: none;
+  background-color: lightgray;
+  border: 2px dashed var(--wcs-orange);
+  animation: dangerFlash 1s infinite ease-in alternate;
+}
+@keyframes dangerFlash {
+  from  {background-color: var(--wcs-red)}
+  to {background-color: var(--wcs-gray-light)}
+}
