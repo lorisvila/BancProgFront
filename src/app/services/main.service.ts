@@ -1,7 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {API_ResponseType, BancConfig, Card, Commande, ConfigNetworking, Etat, GPIOModule, Pinout} from '../types';
+import {API_ResponseType, BancConfig, Card, Commande, ConfigNetworking, ErrorInListType, Etat, GPIOModule, Pinout} from '../types';
 import {CommunicationService} from './communication.service';
 import {ToastrService} from 'ngx-toastr';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -24,17 +25,21 @@ export class MainService {
   constructor(
 	  private communicationService: CommunicationService,
 	  private notif: ToastrService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.communicationService.connectedToWsAPI.subscribe(value => {
       if (value) {
         this.totalRefreshData()
-      } else {
-        this.notif.warning("Vous venez de vous déconnecter de l'API...")
       }
     })
     this.communicationService.messageFromWsAPI.subscribe(message => {
       this.handleMessage(message)
     })
+  }
+
+  resyncGpioModules() {
+    this.communicationService.wsRequestToAPI(['updateRegisters'])
   }
 
   totalRefreshData() {
@@ -47,8 +52,19 @@ export class MainService {
     this.communicationService.wsRequestToAPI(valuesToRefresh, {refresh: true})
   }
 
+  showPastErrors(errors: ErrorInListType[]) {
+    for (let errorId in errors) {
+      let error = errors[errorId];
+      this.notif.error(error.errorObject.message)
+    }
+  }
+
   handleMessage(message: API_ResponseType) {
     switch (message.dataName) {
+      case "errors": {
+        this.showPastErrors(message.data as ErrorInListType[])
+        break;
+      }
       case "networkDevicesStatus": {
         this.networkDevices = [...message.data as ConfigNetworking[]]
         break;
@@ -85,12 +101,28 @@ export class MainService {
         this.refreshed.emit(true)
         break;
       }
+      case "updateRegisters": {
+        this.refreshed.emit(true)
+        this.notif.info("Les module GPIO ont été resynchronisés")
+        break;
+      }
       default: {
         this.notif.warning(`Message ${message.dataName} reçu de l'API mais je aucune function affectée...`)
         return;
       }
     }
     this.valuesUpdated.emit(message.dataName)
+  }
+
+  addParamToUrl(paramater: string, value: string) {
+    let queryParams = {}
+    queryParams[paramater] = value
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge',
+      preserveFragment: true
+    });
   }
 
 }

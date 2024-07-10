@@ -54,27 +54,13 @@ export class InputOutputComponent {
 
   changeSelectedCardFromEvent(event: any) {
     let cardName: string = ((event as CustomEvent).detail as RadioGroupChangeEventDetail).value
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        card: cardName
-      },
-      queryParamsHandling: 'merge',
-      preserveFragment: true
-    });
+    this.MainService.addParamToUrl('card', cardName)
     this.CommandsService.changeSelectedCardFromEvent(event)
   }
 
   changeSelectedModuleFromEvent(event: any) {
     let moduleName: string = ((event as CustomEvent).detail as RadioGroupChangeEventDetail).value
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        module: moduleName
-      },
-      queryParamsHandling: 'merge',
-      preserveFragment: true
-    });
+    this.MainService.addParamToUrl('module', moduleName)
     this.CommandsService.changeSelectedModuleFromEvent(event)
   }
 

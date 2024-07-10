@@ -84,7 +84,6 @@ export class CommandsService {
       this.notif.error("La carte demandée n'est pas valide...")
       return;
     }
-    console.log(typeof value)
     this.moduleNumberSelected = value
     let foundModule: GPIOModule | undefined = this.MainService.bancModules.find(card => card.API_Address == this.moduleNumberSelected)
     if (!foundModule) {

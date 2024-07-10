@@ -37,3 +37,8 @@ h2 {
   font-weight: 500;
   min-width: 20%;
 }
+.actions {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1em;
+}

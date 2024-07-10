@@ -1,0 +1,29 @@
+<wcs-action-bar gutter="true">
+  Equipements réseau
+</wcs-action-bar>
+<main>
+  <wcs-tabs align=""> <!--TODO : Add the tab gestion-->
+    <wcs-tab header="Statut" itemKey="status">
+      <div class="tab-content">
+        <wcs-card>
+          <wcs-card-body class="card-header"><wcs-mat-icon icon="monitor_heart"></wcs-mat-icon><h2>Etat de la Rétrovision</h2></wcs-card-body>
+          <wcs-divider></wcs-divider>
+          <wcs-card-body>
+            <div class="devices-state">
+              <ng-container *ngFor="let devicesGroup of MainService.networkDevices">
+                <ng-container *ngIf="devicesGroup.family == 'RetroVision'">
+                  <wcs-button *ngFor="let device of devicesGroup.addresses" [href]="'https://' + device.IP + '/'"
+                              target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
+                    <wcs-mat-icon icon="link"></wcs-mat-icon>{{device.name}}</wcs-button>
+                </ng-container>
+              </ng-container>
+            </div>
+          </wcs-card-body>
+        </wcs-card>
+      </div>
+    </wcs-tab>
+    <wcs-tab header="Flux Vidéo" itemKey="video">
+
+    </wcs-tab>
+  </wcs-tabs>
+</main>

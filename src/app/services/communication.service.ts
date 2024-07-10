@@ -16,6 +16,7 @@ export class CommunicationService {
   API_WS: WebSocket
   connectedToWsAPI: EventEmitter<boolean> = new EventEmitter<boolean>()
   messageFromWsAPI: EventEmitter<API_ResponseType> = new EventEmitter<API_ResponseType>();
+  connectionTime: Date
 
 	API_Base_Commands: string = "/api/v1/commands"
 	API_Base_General: string = "/api/v1"
@@ -50,12 +51,18 @@ export class CommunicationService {
 	}
 
   wsConnectToAPI() {
+    this.connectionTime = new Date()
     this.API_WS = new WebSocket(this.API_WS_Address)
     this.API_WS.addEventListener('open', () => {
       this.connectedToWsAPI.emit(true)
     })
     this.API_WS.addEventListener('close', () => {
       this.connectedToWsAPI.emit(false)
+      if ((new Date().getTime() - this.connectionTime.getTime()) / 1000 > 1) {
+        this.notif.warning("Vous venez de vous déconnecter de l'API...")
+      } else {
+        this.notif.error("L'API n'est pas disponible...")
+      }
     })
     this.API_WS.addEventListener('message', (message) => {
       let responseObject: API_ResponseType = JSON.parse(message.data) as API_ResponseType

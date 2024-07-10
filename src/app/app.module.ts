@@ -12,12 +12,16 @@ import { NetworkingComponent } from './pages/networking/networking.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { RetrovisionComponent } from './pages/retrovision/retrovision.component';
+import { VideoprotectionComponent } from './pages/videoprotection/videoprotection.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InputOutputComponent,
-    NetworkingComponent
+    NetworkingComponent,
+    RetrovisionComponent,
+    VideoprotectionComponent
   ],
   imports: [
     BrowserModule,

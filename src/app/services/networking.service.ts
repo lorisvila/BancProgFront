@@ -20,6 +20,7 @@ export class NetworkingService {
     this.dataModalDeviceInformations = [
       {name: 'Nom', value: device.name},
       {name: 'Type', value: deviceGroup.des},
+      {name: 'Famille', value: deviceGroup.family},
       {name: 'Addresse IP', value: device.IP},
       {name: 'Masque', value: device.SubnetMask},
       {name: 'Communique ?', value: device.IsAlive ? 'Oui' : 'Non'},

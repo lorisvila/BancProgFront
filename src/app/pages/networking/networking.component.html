@@ -14,19 +14,20 @@
           <wcs-card-body class="card-header">
             <wcs-mat-icon icon="interests"></wcs-mat-icon>
             <h2>Statut des équipements réseau</h2>
+            <wcs-button id="btn-toggle-name" mode="stroked" (click)="toggleDeviceIp($event)">Afficher {{showDeviceIp ? 'Nom' : 'IP'}}</wcs-button>
           </wcs-card-body>
           <wcs-divider></wcs-divider>
           <wcs-card-body class="devicesGroupCard">
             <ng-container *ngIf="MainService.networkDevices">
-              <div *ngFor="let deviceGroup of MainService.networkDevices">
+              <div *ngFor="let deviceGroup of MainService.networkDevices" class="diagram-banc">
                 <wcs-badge class="wcs-primary">{{deviceGroup.des}}</wcs-badge>
-                <!--<span class="device-groupe-title">{{deviceGroup.name}}</span>-->
-                <div class="devices-div">
+                <div class="devices-div diagram-etage">
                   <div *ngFor="let device of deviceGroup.addresses"
                        [class]="device.IsAlive ? 'device-div connected-device' : 'device-div disconnected-device'"
                        (click)="NetworkingService.openDeviceModal(deviceGroup, device)">
                     <wcs-mat-icon [icon]="device.IsAlive ? 'wifi' : 'wifi_off'"></wcs-mat-icon>
-                    <span>{{device.IP}}</span>
+                    <span *ngIf="showDeviceIp">{{device.IP}}</span>
+                    <span *ngIf="!showDeviceIp">{{device.name}}</span>
                   </div>
                 </div>
               </div>

@@ -7,7 +7,6 @@ export type BancConfig = {
 }
 
 // GPIO Config Side
-
 export type Card = {
 	cardType?: string
 	cardName: string
@@ -78,6 +77,7 @@ export type CommandeCondition = {
 export type ConfigNetworking = {
 	name: string
   des: string
+  family: string
 	quantity: number
 	addresses: DeviceNetworkParams[]
 }
@@ -102,4 +102,10 @@ export type API_ResponseType = {
 		code: number,
 		message?: string
 	}
+}
+
+// Errors list
+export type ErrorInListType = {
+  date: Date
+  errorObject: Error
 }

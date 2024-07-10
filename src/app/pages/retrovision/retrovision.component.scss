@@ -1,0 +1,23 @@
+.tab-content {
+  margin-top: 1em;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1em;
+}
+.card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+}
+h2 {
+  margin: 0.3em 0;
+}
+wcs-button {
+  width: fit-content;
+}
+.devices-state {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1em;
+}

@@ -1,9 +1,14 @@
 <wcs-action-bar gutter="true">
 	Entrées MESD
-	<div slot="actions">
-    <wcs-button shape="round" size="l" class="wcs-warning" (click)="MainService.totalRefreshData()">
-      <wcs-mat-icon icon="autorenew"></wcs-mat-icon>
-    </wcs-button>
+	<div slot="actions" class="actions">
+      <wcs-button shape="" size="l" class="wcs-success" (click)="MainService.totalRefreshData()">
+        <wcs-mat-icon icon="refresh"></wcs-mat-icon>
+        <span>Rafraîchir</span>
+      </wcs-button>
+      <wcs-button shape="" size="l" class="wcs-warning" (click)="MainService.resyncGpioModules()">
+        <wcs-mat-icon icon="sync"></wcs-mat-icon>
+        <span>Re-synchroniser</span>
+      </wcs-button>
 	</div>
 </wcs-action-bar>
 <main>
@@ -88,7 +93,7 @@
                         [data]="CommandsService.cardSelected.pins" row-id-path="NumberOnCard">
                 <wcs-grid-column name="Nom" id="PinName-card" path="PinName" sort=""></wcs-grid-column>
                 <wcs-grid-column name="Numéro" id="NumberOnCard-card" path="NumberOnCard" sort=""></wcs-grid-column>
-                <wcs-grid-column name="Etat" id="state-card" custom-cells="true"></wcs-grid-column>
+                <wcs-grid-column name="Etat Relu" id="state-card" custom-cells="true"></wcs-grid-column>
                 <wcs-grid-column name="Commande" id="command-card" custom-cells="true"></wcs-grid-column>
 
                 <wcs-grid-custom-cell column-Id="state-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">
