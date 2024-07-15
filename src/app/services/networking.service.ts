@@ -10,6 +10,7 @@ export class NetworkingService {
 
   showModalDeviceInformations: boolean = false
   dataModalDeviceInformations: {name: string, value: string}[] | undefined = undefined
+  selectedDevice: DeviceNetworkParams | undefined = undefined
 
   constructor(
     public MainService: MainService,
@@ -17,6 +18,7 @@ export class NetworkingService {
   ) {}
 
   openDeviceModal(deviceGroup: ConfigNetworking, device: DeviceNetworkParams) {
+    this.selectedDevice = device
     this.dataModalDeviceInformations = [
       {name: 'Nom', value: device.name},
       {name: 'Type', value: deviceGroup.des},

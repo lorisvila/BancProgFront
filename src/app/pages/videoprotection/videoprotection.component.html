@@ -1,1 +1,43 @@
-<p>videoprotection works!</p>
+<app-page-header pageName="Equipements réseau" [refreshButton]="true"></app-page-header>
+<main>
+  <wcs-tabs align=""> <!--TODO : Add the tab gestion-->
+    <wcs-tab header="Statut" itemKey="status">
+      <div class="tab-content">
+        <wcs-card>
+          <wcs-card-body class="card-header"><wcs-mat-icon icon="monitor_heart"></wcs-mat-icon><h2>Etat de la Vidéoprotection</h2></wcs-card-body>
+          <wcs-divider></wcs-divider>
+          <wcs-card-body>
+            <div class="devices-state">
+              <ng-container *ngFor="let devicesGroup of MainService.networkDevices">
+                <ng-container *ngIf="devicesGroup.family == 'VideoProtection'">
+                  <wcs-button *ngFor="let device of devicesGroup.addresses" [href]="'http://' + device.IP + '/'"
+                              target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
+                    <wcs-mat-icon icon="link"></wcs-mat-icon>{{device.name}}</wcs-button>
+                </ng-container>
+              </ng-container>
+            </div>
+          </wcs-card-body>
+        </wcs-card>
+        <wcs-card>
+          <wcs-card-body class="card-header"><wcs-mat-icon icon="monitor_heart"></wcs-mat-icon><h2>Flux direct caméras</h2></wcs-card-body>
+          <wcs-divider></wcs-divider>
+          <wcs-card-body>
+            <div class="devices-state">
+              <ng-container *ngFor="let devicesGroup of MainService.networkDevices">
+                <ng-container *ngIf="devicesGroup.family == 'VideoProtection'">
+                  <ng-container *ngFor="let device of devicesGroup.addresses">
+                    <ng-container *ngFor="let service of device.services">
+                      <wcs-button *ngIf="service.protocol == 'http/mjpeg'" [href]="service.url"
+                                  target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
+                        🎥 {{device.name}}</wcs-button>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </wcs-card-body>
+        </wcs-card>
+      </div>
+    </wcs-tab>
+  </wcs-tabs>
+</main>

@@ -14,6 +14,10 @@ import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RetrovisionComponent } from './pages/retrovision/retrovision.component';
 import { VideoprotectionComponent } from './pages/videoprotection/videoprotection.component';
+import { RefreshButtonComponent } from './components/refresh-button/refresh-button.component';
+import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { SyncButtonComponent } from './components/sync-button/sync-button.component';
+import { UpdatesComponent } from './pages/updates/updates.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,11 @@ import { VideoprotectionComponent } from './pages/videoprotection/videoprotectio
     InputOutputComponent,
     NetworkingComponent,
     RetrovisionComponent,
-    VideoprotectionComponent
+    VideoprotectionComponent,
+    RefreshButtonComponent,
+    PageHeaderComponent,
+    SyncButtonComponent,
+    UpdatesComponent
   ],
   imports: [
     BrowserModule,

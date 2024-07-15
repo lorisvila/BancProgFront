@@ -1,16 +1,4 @@
-<wcs-action-bar gutter="true">
-	Entrées MESD
-	<div slot="actions" class="actions">
-      <wcs-button shape="" size="l" class="wcs-success" (click)="MainService.totalRefreshData()">
-        <wcs-mat-icon icon="refresh"></wcs-mat-icon>
-        <span>Rafraîchir</span>
-      </wcs-button>
-      <wcs-button shape="" size="l" class="wcs-warning" (click)="MainService.resyncGpioModules()">
-        <wcs-mat-icon icon="sync"></wcs-mat-icon>
-        <span>Re-synchroniser</span>
-      </wcs-button>
-	</div>
-</wcs-action-bar>
+<app-page-header pageName="Entrées MESD" [refreshButton]="true" [syncButton]="true"></app-page-header>
 <main>
   <wcs-tabs align="" [selectedKey]="selectedTabFromUrl" (tabChange)="changeUrlToTab($event)">
 
@@ -51,7 +39,7 @@
           <wcs-divider></wcs-divider>
           <wcs-card-body>
             <ng-container *ngIf="MainService.commandsAvailable">
-              <div class="flex-colum">
+              <div class="flex-column">
                 <wcs-button class="wcs-primary" *ngFor="let command of this.MainService.commandsAvailable"
                             (click)="CommandsService.sendSimpleCommand(command.shortName, $event)">{{command.Name}}</wcs-button>
               </div>

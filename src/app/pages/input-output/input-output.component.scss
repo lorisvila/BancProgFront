@@ -10,16 +10,6 @@
   align-items: center;
   gap: 1em;
 }
-.flex-colum {
-  display: flex;
-  flex-flow: column wrap;
-  gap: 1em;
-}
-.flex-row {
-  display: flex;
-  flex-flow: column wrap;
-  gap: 1em;
-}
 h2 {
   margin: 0.3em 0;
 }
@@ -36,9 +26,4 @@ h2 {
 .table-etats-name {
   font-weight: 500;
   min-width: 20%;
-}
-.actions {
-  display: flex;
-  flex-flow: row nowrap;
-  gap: 1em;
 }

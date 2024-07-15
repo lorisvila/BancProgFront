@@ -1,6 +1,4 @@
-<wcs-action-bar gutter="true">
-  Equipements réseau
-</wcs-action-bar>
+<app-page-header pageName="Equipements réseau" [refreshButton]="true"></app-page-header>
 <main>
   <wcs-tabs align=""> <!--TODO : Add the tab gestion-->
     <wcs-tab header="Statut" itemKey="status">
@@ -12,7 +10,7 @@
             <div class="devices-state">
               <ng-container *ngFor="let devicesGroup of MainService.networkDevices">
                 <ng-container *ngIf="devicesGroup.family == 'RetroVision'">
-                  <wcs-button *ngFor="let device of devicesGroup.addresses" [href]="'https://' + device.IP + '/'"
+                  <wcs-button *ngFor="let device of devicesGroup.addresses" [href]="'http://' + device.IP + '/'"
                               target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
                     <wcs-mat-icon icon="link"></wcs-mat-icon>{{device.name}}</wcs-button>
                 </ng-container>
@@ -20,10 +18,28 @@
             </div>
           </wcs-card-body>
         </wcs-card>
-      </div>
-    </wcs-tab>
-    <wcs-tab header="Flux Vidéo" itemKey="video">
+        <wcs-card>
+          <wcs-card-body class="card-header"><wcs-mat-icon icon="monitor_heart"></wcs-mat-icon><h2>Flux direct des caméras</h2></wcs-card-body>
+          <wcs-divider></wcs-divider>
+          <wcs-card-body>
+            <span>User : <b>admin</b> | Mot de passe : <b>sncf!moxa21</b></span>
 
+            <div class="devices-state">
+              <ng-container *ngFor="let devicesGroup of MainService.networkDevices">
+                <ng-container *ngIf="devicesGroup.family == 'RetroVision'">
+                  <ng-container *ngFor="let device of devicesGroup.addresses">
+                    <ng-container *ngFor="let service of device.services">
+                      <wcs-button *ngIf="service.protocol == 'http/mjpeg'" [href]="service.url"
+                                  target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
+                        🎥 {{device.name}}</wcs-button>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </wcs-card-body>
+        </wcs-card>
+      </div>
     </wcs-tab>
   </wcs-tabs>
 </main>

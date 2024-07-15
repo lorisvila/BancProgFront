@@ -13,16 +13,6 @@
 #btn-toggle-name {
   margin-left: auto;
 }
-.flex-colum {
-  display: flex;
-  flex-flow: column wrap;
-  gap: 1em;
-}
-.flex-row {
-  display: flex;
-  flex-flow: column wrap;
-  gap: 1em;
-}
 h2 {
   margin: 0.3em 0;
 }
@@ -59,4 +49,9 @@ h2 {
 }
 .header-modal {
   margin-bottom: 0.5em;
+}
+.services-div {
+  margin-top: 0.5em;
+  padding: 1em;
+  align-content: flex-start;
 }

@@ -48,3 +48,14 @@ body {
 wcs-mat-icon {
   user-select: none;
 }
+
+.flex-column {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 1em;
+}
+.flex-row {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 1em;
+}

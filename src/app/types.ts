@@ -83,9 +83,15 @@ export type ConfigNetworking = {
 }
 export type DeviceNetworkParams = {
   name: string
-	IP: string,
-	SubnetMask: string
-	IsAlive?: boolean
+  IP: string,
+  SubnetMask: string
+  IsAlive?: boolean
+  services: ServiceType[]
+}
+export type ServiceType = {
+  name: string
+  protocol: string
+  url: string
 }
 
 // API Response Type

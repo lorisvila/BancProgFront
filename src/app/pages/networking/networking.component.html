@@ -1,11 +1,4 @@
-<wcs-action-bar gutter="true">
-  Equipements réseau
-  <div slot="actions">
-    <wcs-button shape="round" size="l" class="wcs-warning" (click)="MainService.totalRefreshData()">
-      <wcs-mat-icon icon="autorenew"></wcs-mat-icon>
-    </wcs-button>
-  </div>
-</wcs-action-bar>
+<app-page-header pageName="Equipements réseau" [refreshButton]="true"></app-page-header>
 <main>
   <wcs-tabs align=""> <!--TODO : Add the tab gestion-->
     <wcs-tab header="Statut" itemKey="status">
@@ -39,19 +32,23 @@
         </wcs-card>
       </div>
     </wcs-tab>
-
-    <wcs-tab header="Version" itemKey="version">
-
-    </wcs-tab>
   </wcs-tabs>
 
   <wcs-modal [show]="NetworkingService.showModalDeviceInformations">
     <div slot="header" class="header-modal">Informations sur l'équipement</div>
-    <wcs-grid [data]="NetworkingService.dataModalDeviceInformations" *ngIf="NetworkingService.dataModalDeviceInformations"
-              selection-config="none" >
-      <wcs-grid-column path="name" name="Paramètre"></wcs-grid-column>
-      <wcs-grid-column path="value" name="Valeur"></wcs-grid-column>
-    </wcs-grid>
+    <ng-container *ngIf="NetworkingService.dataModalDeviceInformations">
+      <wcs-grid [data]="NetworkingService.dataModalDeviceInformations" selection-config="none" >
+        <wcs-grid-column path="name" name="Paramètre"></wcs-grid-column>
+        <wcs-grid-column path="value" name="Valeur"></wcs-grid-column>
+      </wcs-grid>
+      <div class="flex-row services-div">
+        <ng-container *ngFor="let service of NetworkingService.selectedDevice.services">
+          <wcs-button *ngIf="service.protocol == 'http'" [href]="service.url" target="_blank">
+            {{service.name}}
+          </wcs-button>
+        </ng-container>
+      </div>
+    </ng-container>
     <wcs-badge *ngIf="!NetworkingService.dataModalDeviceInformations" class="wcs-danger">
       Aucune données à afficher...
     </wcs-badge>
