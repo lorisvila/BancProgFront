@@ -13,18 +13,21 @@
           <wcs-divider></wcs-divider>
           <wcs-card-body>
             <div class="table-etats">
-              <ng-container *ngIf="MainService.actualEtats">
-                <div class="table-etats-line" *ngFor="let etat of MainService.actualEtats">
-                  <ng-container *ngIf="etat.actualState">
-                    <span class="table-etats-name">{{etat.category}}</span>
-                    <span class="table-etats-state">{{etat.actualState.name}}</span>
-                  </ng-container>
-                  <ng-container *ngIf="!etat.actualState">
-                    <span class="table-etats-name">{{etat.category}}</span>
-                    <span class="table-etats-state"><wcs-badge class="wcs-warning">Etat non conforme</wcs-badge></span>
-                  </ng-container>
-                </div>
-              </ng-container>
+              <!--TODO : Replace by the app-value-check component-->
+              @if (MainService.actualEtats) {
+                @for (etat of MainService.actualEtats; track etat.category) {
+                  <div class="table-etats-line">
+                    <ng-container *ngIf="etat.actualState">
+                      <span class="table-etats-name">{{etat.category}}</span>
+                      <span class="table-etats-state">{{etat.actualState.name}}</span>
+                    </ng-container>
+                    <ng-container *ngIf="!etat.actualState">
+                      <span class="table-etats-name">{{etat.category}}</span>
+                      <span class="table-etats-state"><wcs-badge class="wcs-warning">Etat non conforme</wcs-badge></span>
+                    </ng-container>
+                  </div>
+                }
+              }
               <ng-container *ngIf="!MainService.actualEtats">
                 <span><wcs-badge class="wcs-danger">Pas d'états...</wcs-badge></span>
               </ng-container>
@@ -85,8 +88,8 @@
                 <wcs-grid-column name="Commande" id="command-card" custom-cells="true"></wcs-grid-column>
 
                 <wcs-grid-custom-cell column-Id="state-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">
-                  <wcs-badge *ngIf="pin.state" class="wcs-success">1</wcs-badge>
-                  <wcs-badge *ngIf="!pin.state" class="wcs-warning">0</wcs-badge>
+                  <wcs-badge *ngIf="pin.realState" class="wcs-success">1</wcs-badge>
+                  <wcs-badge *ngIf="!pin.realState" class="wcs-warning">0</wcs-badge>
                 </wcs-grid-custom-cell>
 
                 <wcs-grid-custom-cell column-Id="command-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">

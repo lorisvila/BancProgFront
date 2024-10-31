@@ -1,8 +1,20 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {API_ResponseType, BancConfig, Card, Commande, ConfigNetworking, ErrorInListType, Etat, GPIOModule, Pinout} from '../types';
+import {
+  API_ResponseType,
+  BancConfig,
+  Card,
+  Commande,
+  ConfigNetworking,
+  ErrorInListType,
+  Etat,
+  GPIOModule,
+  Pinout,
+  SwitchConfigType
+} from '../types';
 import {CommunicationService} from './communication.service';
 import {ToastrService} from 'ngx-toastr';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +23,18 @@ export class MainService {
 
 	// Global variables
 	bancConfigurations: BancConfig[]
-	actualBancConfiguration: BancConfig
-	actualEtats: Etat[]
-	commandsAvailable: Commande[]
+  actualBancConfiguration: BancConfig
+  actualEtats: Etat[]
+  commandsAvailable: Commande[]
   bancCards: Card[]
   bancModules: GPIOModule[]
   bancPinout: Pinout[]
   networkDevices: ConfigNetworking[]
+  switchConfiguration: SwitchConfigType
+  switchConfigurationSubject: Subject<SwitchConfigType> = new Subject()
 
-  valuesUpdated: EventEmitter<string> = new EventEmitter<string>()
-  refreshed: EventEmitter<boolean> = new EventEmitter<boolean>()
+  valuesUpdated$: EventEmitter<string> = new EventEmitter<string>()
+  refreshed$: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   constructor(
 	  private communicationService: CommunicationService,
@@ -43,13 +57,17 @@ export class MainService {
   }
 
   totalRefreshData() {
-    let valuesToRefresh = ['networkDevicesStatus', 'allConfigs', 'currentConfig', 'allCards', 'allModules', 'bancPinout', 'availableCommands', 'allEtats']
+    let valuesToRefresh = ['networkDevicesStatus', 'allConfigs', 'currentConfig', 'allCards', 'allModules', 'bancPinout', 'availableCommands', 'allEtats', 'getSwitchData']
     this.communicationService.wsRequestToAPI(valuesToRefresh, {refresh: true})
   }
 
   partialRefreshData() {
-    let valuesToRefresh = ['networkDevicesStatus', 'allCards', 'allModules', 'allEtats', 'availableCommands']
+    let valuesToRefresh = ['networkDevicesStatus', 'allCards', 'allModules', 'allEtats', 'availableCommands', 'getSwitchData']
     this.communicationService.wsRequestToAPI(valuesToRefresh, {refresh: true})
+  }
+
+  changeConfiguration(configurationName: string) {
+    this.communicationService.wsRequestToAPI(['changeConfiguration'], {options: {changeConfiguration: {configurationName: configurationName}}})
   }
 
   showPastErrors(errors: ErrorInListType[]) {
@@ -97,12 +115,17 @@ export class MainService {
         this.actualEtats = message.data as Etat[]
         break;
       }
+      case "getSwitchData": {
+        this.switchConfiguration = {...message.data} as SwitchConfigType
+        this.switchConfigurationSubject.next(message.data)
+        break;
+      }
       case "refreshedFinsish": {
-        this.refreshed.emit(true)
+        this.refreshed$.emit(true)
         break;
       }
       case "updateRegisters": {
-        this.refreshed.emit(true)
+        this.refreshed$.emit(true)
         this.notif.info("Les module GPIO ont été resynchronisés")
         break;
       }
@@ -111,7 +134,7 @@ export class MainService {
         return;
       }
     }
-    this.valuesUpdated.emit(message.dataName)
+    this.valuesUpdated$.emit(message.dataName)
   }
 
   addParamToUrl(paramater: string, value: string) {

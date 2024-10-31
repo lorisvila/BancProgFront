@@ -1,60 +1,14 @@
 <app-page-header pageName="Equipements réseau" [refreshButton]="true"></app-page-header>
 <main>
-  <wcs-tabs align=""> <!--TODO : Add the tab gestion-->
-    <wcs-tab header="Statut" itemKey="status">
-      <div class="tab-content">
-        <wcs-card>
-          <wcs-card-body class="card-header">
-            <wcs-mat-icon icon="interests"></wcs-mat-icon>
-            <h2>Statut des équipements réseau</h2>
-            <wcs-button id="btn-toggle-name" mode="stroked" (click)="toggleDeviceIp($event)">Afficher {{showDeviceIp ? 'Nom' : 'IP'}}</wcs-button>
-          </wcs-card-body>
-          <wcs-divider></wcs-divider>
-          <wcs-card-body class="devicesGroupCard">
-            <ng-container *ngIf="MainService.networkDevices">
-              <div *ngFor="let deviceGroup of MainService.networkDevices" class="diagram-banc">
-                <wcs-badge class="wcs-primary">{{deviceGroup.des}}</wcs-badge>
-                <div class="devices-div diagram-etage">
-                  <div *ngFor="let device of deviceGroup.addresses"
-                       [class]="device.IsAlive ? 'device-div connected-device' : 'device-div disconnected-device'"
-                       (click)="NetworkingService.openDeviceModal(deviceGroup, device)">
-                    <wcs-mat-icon [icon]="device.IsAlive ? 'wifi' : 'wifi_off'"></wcs-mat-icon>
-                    <span *ngIf="showDeviceIp">{{device.IP}}</span>
-                    <span *ngIf="!showDeviceIp">{{device.name}}</span>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="!MainService.networkDevices">
-              <span><wcs-badge class="wcs-danger">Pas d'équipements réseau...</wcs-badge></span>
-            </ng-container>
-          </wcs-card-body>
-        </wcs-card>
-      </div>
+  <wcs-tabs align="" selectedIndex="1"> <!--TODO : Add the tab gestion-->
+    <wcs-tab header="Configuration Avancée Switch">
+      <app-advanced-config-switch></app-advanced-config-switch>
+    </wcs-tab>
+    <wcs-tab header="Configuration Switch">
+      <app-simple-config-switch></app-simple-config-switch>
+    </wcs-tab>
+    <wcs-tab header="Statut Réseau" itemKey="status">
+      <app-network-status></app-network-status>
     </wcs-tab>
   </wcs-tabs>
-
-  <wcs-modal [show]="NetworkingService.showModalDeviceInformations">
-    <div slot="header" class="header-modal">Informations sur l'équipement</div>
-    <ng-container *ngIf="NetworkingService.dataModalDeviceInformations">
-      <wcs-grid [data]="NetworkingService.dataModalDeviceInformations" selection-config="none" >
-        <wcs-grid-column path="name" name="Paramètre"></wcs-grid-column>
-        <wcs-grid-column path="value" name="Valeur"></wcs-grid-column>
-      </wcs-grid>
-      <div class="flex-row services-div">
-        <ng-container *ngFor="let service of NetworkingService.selectedDevice.services">
-          <wcs-button *ngIf="service.protocol == 'http'" [href]="service.url" target="_blank">
-            {{service.name}}
-          </wcs-button>
-        </ng-container>
-      </div>
-    </ng-container>
-    <wcs-badge *ngIf="!NetworkingService.dataModalDeviceInformations" class="wcs-danger">
-      Aucune données à afficher...
-    </wcs-badge>
-    <div slot="actions">
-      <wcs-button (click)="NetworkingService.showModalDeviceInformations = false">Fini</wcs-button>
-    </div>
-  </wcs-modal>
-
 </main>

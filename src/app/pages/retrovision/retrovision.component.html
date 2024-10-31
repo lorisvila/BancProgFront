@@ -1,4 +1,4 @@
-<app-page-header pageName="Equipements réseau" [refreshButton]="true"></app-page-header>
+<app-page-header pageName="Rétrovision" [refreshButton]="true"></app-page-header>
 <main>
   <wcs-tabs align=""> <!--TODO : Add the tab gestion-->
     <wcs-tab header="Statut" itemKey="status">
@@ -7,15 +7,19 @@
           <wcs-card-body class="card-header"><wcs-mat-icon icon="monitor_heart"></wcs-mat-icon><h2>Etat de la Rétrovision</h2></wcs-card-body>
           <wcs-divider></wcs-divider>
           <wcs-card-body>
-            <div class="devices-state">
-              <ng-container *ngFor="let devicesGroup of MainService.networkDevices">
-                <ng-container *ngIf="devicesGroup.family == 'RetroVision'">
-                  <wcs-button *ngFor="let device of devicesGroup.addresses" [href]="'http://' + device.IP + '/'"
-                              target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
-                    <wcs-mat-icon icon="link"></wcs-mat-icon>{{device.name}}</wcs-button>
-                </ng-container>
-              </ng-container>
-            </div>
+            <app-value-checker [variable]="MainService.networkDevices" variableName="Equipements Réseaux">
+              <div class="devices-state">
+                @for (devicesGroup of MainService.networkDevices; track devicesGroup.family) {
+                  @if (devicesGroup.family == 'RetroVision') {
+                    @for (device of devicesGroup.addresses; track device.name) {
+                      <wcs-button [href]="'http://' + device.IP + '/'"
+                                  target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
+                        <wcs-mat-icon icon="link"></wcs-mat-icon>{{device.name}}</wcs-button>
+                    }
+                  }
+                }
+              </div>
+            </app-value-checker>
           </wcs-card-body>
         </wcs-card>
         <wcs-card>
@@ -24,19 +28,23 @@
           <wcs-card-body>
             <span>User : <b>admin</b> | Mot de passe : <b>sncf!moxa21</b></span>
 
-            <div class="devices-state">
-              <ng-container *ngFor="let devicesGroup of MainService.networkDevices">
-                <ng-container *ngIf="devicesGroup.family == 'RetroVision'">
-                  <ng-container *ngFor="let device of devicesGroup.addresses">
-                    <ng-container *ngFor="let service of device.services">
-                      <wcs-button *ngIf="service.protocol == 'http/mjpeg'" [href]="service.url"
-                                  target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
-                        🎥 {{device.name}}</wcs-button>
-                    </ng-container>
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-            </div>
+            <app-value-checker [variable]="MainService.networkDevices" variableName="Equipements Réseaux">
+              <div class="devices-state">
+                @for (devicesGroup of MainService.networkDevices; track devicesGroup.family) {
+                  @if (devicesGroup.family == 'RetroVision') {
+                    @for (device of devicesGroup.addresses; track device.name) {
+                      @for (service of device.services; track service.url) {
+                        @if (service.protocol == 'http/mjpeg') {
+                          <wcs-button [href]="service.url"
+                                      target="_blank" [class]="device.IsAlive ? 'wcs-success' : 'wcs-danger'" mode="stroked">
+                            🎥 {{device.name}}</wcs-button>
+                        }
+                      }
+                    }
+                  }
+                }
+              </div>
+            </app-value-checker>
           </wcs-card-body>
         </wcs-card>
       </div>

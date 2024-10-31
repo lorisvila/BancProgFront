@@ -18,41 +18,55 @@ import { RefreshButtonComponent } from './components/refresh-button/refresh-butt
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { SyncButtonComponent } from './components/sync-button/sync-button.component';
 import { UpdatesComponent } from './pages/updates/updates.component';
+import { ValueCheckerComponent } from './components/value-checker/value-checker.component';
+import {FilesComponent} from './pages/updates/files/files.component';
+import {SwitchPortComponent} from './components/switch-port/switch-port.component';
+import {AdvancedConfigSwitchComponent} from './pages/networking/advanced-config-switch/advanced-config-switch.component';
+import {NetworkStatusComponent} from './pages/networking/network-status/network-status.component';
+import {SimpleConfigSwitchComponent} from './pages/networking/simple-config-switch/simple-config-switch.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    InputOutputComponent,
-    NetworkingComponent,
-    RetrovisionComponent,
-    VideoprotectionComponent,
-    RefreshButtonComponent,
-    PageHeaderComponent,
-    SyncButtonComponent,
-    UpdatesComponent
+    declarations: [
+        AppComponent,
+        InputOutputComponent,
+        NetworkingComponent,
+        RetrovisionComponent,
+        VideoprotectionComponent,
+        RefreshButtonComponent,
+        PageHeaderComponent,
+        SyncButtonComponent,
+        UpdatesComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        WcsAngularModule,
+        FormlyModule.forRoot(),
+        WcsFormlyModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        ToastrModule.forRoot({
+            progressBar: true,
+            autoDismiss: true,
+            closeButton: true,
+            positionClass: 'toast-bottom-right',
+            timeOut: 7000
+        }),
+        BrowserAnimationsModule,
+        FilesComponent,
+        SwitchPortComponent,
+        AdvancedConfigSwitchComponent,
+        NetworkStatusComponent,
+        SimpleConfigSwitchComponent,
+        ValueCheckerComponent,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
+  exports: [
+    PageHeaderComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    WcsAngularModule,
-    FormlyModule.forRoot(),
-    WcsFormlyModule,
-    ReactiveFormsModule,
-	  HttpClientModule,
-	  ToastrModule.forRoot({
-		  progressBar: true,
-		  autoDismiss: true,
-		  closeButton: true,
-		  positionClass: 'toast-bottom-right',
-		  timeOut: 7000
-	  }),
-	  BrowserAnimationsModule
-  ],
-  providers: [
-  ],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
 }

@@ -23,7 +23,7 @@ export class InputOutputComponent {
     this.route.fragment.subscribe(fragment => {
       this.selectedTabFromUrl = fragment
     })
-    this.MainService.refreshed.subscribe(() => {
+    this.MainService.refreshed$.subscribe(() => {
       if (!this.CommandsService.cardSelected) {
         this.route.queryParams.subscribe(params => {
           if (params['card']) {

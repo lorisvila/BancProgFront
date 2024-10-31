@@ -25,7 +25,7 @@ export class CommandsService {
 	  public MainService: MainService,
     public notif: ToastrService
   ) {
-    this.MainService.valuesUpdated.subscribe(dataName => {
+    this.MainService.valuesUpdated$.subscribe(dataName => {
       if (dataName == 'allCards') {
         this.updateSelectedCard()
       }
@@ -81,7 +81,7 @@ export class CommandsService {
   changeSelectedModuleFromEvent(event: any) {
     let value = ((event as CustomEvent).detail as RadioGroupChangeEventDetail).value
     if (Number.isNaN(value)) {
-      this.notif.error("La carte demandée n'est pas valide...")
+      this.notif.error("La carte demandée n'est pas valide...", "Aïe...")
       return;
     }
     this.moduleNumberSelected = value

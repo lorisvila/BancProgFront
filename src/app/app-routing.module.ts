@@ -4,6 +4,7 @@ import {InputOutputComponent} from "./pages/input-output/input-output.component"
 import {NetworkingComponent} from "./pages/networking/networking.component";
 import {RetrovisionComponent} from './pages/retrovision/retrovision.component';
 import {VideoprotectionComponent} from './pages/videoprotection/videoprotection.component';
+import {UpdatesComponent} from './pages/updates/updates.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'VideoProtection',
     component: VideoprotectionComponent
+  },
+  {
+    path: 'Updates',
+    component: UpdatesComponent
   },
   {
     path: '**',

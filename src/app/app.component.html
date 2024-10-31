@@ -21,16 +21,23 @@
         Déconnecté
       </wcs-badge>
     </ng-container>
-    <wcs-select *ngIf="MainService.actualBancConfiguration && MainService.bancConfigurations" placeholder="Configuration" size="m" id="config_select" [value]="MainService.actualBancConfiguration.Name">
-      <wcs-select-option *ngFor="let configuration of MainService.bancConfigurations" [value]="configuration.Name">
-        {{configuration.Name}}
-      </wcs-select-option>
-    </wcs-select>
-    <div *ngIf="!MainService.actualBancConfiguration || !MainService.bancConfigurations">
-      <wcs-badge class="wcs-danger">Impossible de charger les configurations</wcs-badge>
-    </div>
+    @if (MainService.actualBancConfiguration && MainService.bancConfigurations) {
+      <wcs-select #selectConfig placeholder="Configuration" size="m" id="config_select" [value]="MainService.actualBancConfiguration.Name" (wcsChange)="MainService.changeConfiguration(selectConfig.value)">
+        @for (configuration of MainService.bancConfigurations; track configuration.Name) {
+          <wcs-select-option [value]="configuration.Name">
+            {{configuration.Name}}
+          </wcs-select-option>
+        }
+      </wcs-select>
+    }
+    @if (!MainService.actualBancConfiguration || !MainService.bancConfigurations) {
+      <div>
+        <wcs-badge class="wcs-danger">Impossible de charger les configurations</wcs-badge>
+      </div>
+    }
   </div>
 </wcs-header>
+
 <wcs-nav>
   <wcs-nav-item text="Equipements réseau" routerLink="/Networking" role="link" data-href="/Networking" routerLinkActive="active">
     <wcs-mat-icon icon="data_thresholding"></wcs-mat-icon>
@@ -42,9 +49,13 @@
     <wcs-mat-icon icon="videocam"></wcs-mat-icon>
   </wcs-nav-item>
   <wcs-nav-item text="VidéoProtection" routerLink="/VideoProtection" role="link" data-href="/VideoProtection" routerLinkActive="active">
-    <wcs-mat-icon icon="video_camera_front"></wcs-mat-icon>
+    <wcs-mat-icon icon="background_replace"></wcs-mat-icon>
+  </wcs-nav-item>
+  <wcs-nav-item text="Mise à jour" routerLink="/Updates" role="link" data-href="/Updates" routerLinkActive="active">
+    <wcs-mat-icon icon="deployed_code_update"></wcs-mat-icon>
   </wcs-nav-item>
 </wcs-nav>
+
 <main>
   <router-outlet></router-outlet>
 </main>

@@ -8,7 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class CommunicationService {
 
-  API_HOST: string = '10.126.0.1';
+  /*API_HOST: string = '10.126.0.1';*/
+  API_HOST: string = '127.0.0.1';
 
   API_REST_PORT: number = 8080;
 	API_REST_Address: URL = new URL(`http://${this.API_HOST}:${this.API_REST_PORT}/`)

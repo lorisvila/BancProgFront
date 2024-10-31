@@ -20,6 +20,7 @@ export type CardPin = {
 	PinName: string,
 	NumberOnCard: string,
 	state?: boolean
+  realState?: boolean
 }
 export type GPIOModule = {
 	defaultState: number,
@@ -42,7 +43,6 @@ export type AppModulePin = {
 }
 
 // Scripting Side
-
 export type Etat = {
 	category: string
 	actualCode: number
@@ -73,7 +73,6 @@ export type CommandeCondition = {
 }
 
 // Network Config side
-
 export type ConfigNetworking = {
 	name: string
   des: string
@@ -92,6 +91,46 @@ export type ServiceType = {
   name: string
   protocol: string
   url: string
+  port?: number
+}
+
+/// Switch ports types
+export type SwitchConfigType = {
+  type: string
+  connection: boolean
+  display: string[][]
+  defaultConfig: PortConfigType
+  ports: SwitchPortType[]
+  architectures: ArchitectureType[]
+  currentArchitecture: ArchitectureType
+}
+export type SwitchPortType = {
+  port: string
+  portNum: string
+  link: boolean
+  configurable: boolean
+  description: {
+    PoE: boolean
+    speed: string
+  }
+  device?: string
+  config?: PortConfigType
+}
+export type PortConfigType = {
+  ip: string
+  subnetMask: string
+  gateway: string
+  dns: string
+  ntp: string
+  hostname: string
+}
+export type ArchitectureType = {
+  name: string
+  ports: ArchitecturePortType[]
+}
+export type ArchitecturePortType = {
+  device: string
+  port: string
 }
 
 // API Response Type

@@ -2,26 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import {MainService} from '../../services/main.service';
 import {NetworkingService} from '../../services/networking.service';
 import {SwitchChangeEventDetail} from 'wcs-core';
+import {SwitchPortType} from '../../types';
 
 @Component({
   selector: 'app-networking',
   templateUrl: './networking.component.html',
   styleUrls: ['./networking.component.scss']
 })
-export class NetworkingComponent implements OnInit {
-
-  showDeviceIp: boolean = false;
+export class NetworkingComponent {
 
   constructor(
-    public MainService: MainService,
-    public NetworkingService: NetworkingService,
-  ) { }
-
-  ngOnInit(): void {
+    public mainService: MainService,
+    public networkingService: NetworkingService,
+  ) {
   }
-
-  toggleDeviceIp(event: MouseEvent): void {
-    this.showDeviceIp = !this.showDeviceIp
-  }
-
 }

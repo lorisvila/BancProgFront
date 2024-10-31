@@ -5,6 +5,39 @@ body {
   margin: 0;
 }
 
+/* Include material icons fonts */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('assets/fonts/icons/MaterialSymbolsOutlined-VariableFont_FILL,GRAD,opsz,wght.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Material Icons Outlined';
+  font-style: normal;
+  font-weight: 400;
+  src: url('assets/fonts/icons/MaterialSymbolsOutlined-VariableFont_FILL,GRAD,opsz,wght.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Material Icons Two Tone';
+  font-style: normal;
+  font-weight: 400;
+  src: url('assets/fonts/icons/MaterialSymbolsOutlined-VariableFont_FILL,GRAD,opsz,wght.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Material Icons Round';
+  font-style: normal;
+  font-weight: 400;
+  src: url('assets/fonts/icons/MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Material Icons Sharp';
+  font-style: normal;
+  font-weight: 400;
+  src: url('assets/fonts/icons/MaterialSymbolsSharp-VariableFont_FILL,GRAD,opsz,wght.ttf') format('truetype');
+}
+
+/*Include SNCF fonts*/
 @font-face {
   font-family: Avenir;
   src: url("assets/fonts/avenir-lighter.woff");
@@ -49,6 +82,18 @@ wcs-mat-icon {
   user-select: none;
 }
 
+.column-form {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 1em;
+}
+
+.row-form {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1em;
+}
+
 .flex-column {
   display: flex;
   flex-flow: column wrap;
@@ -56,6 +101,30 @@ wcs-mat-icon {
 }
 .flex-row {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: row wrap;
   gap: 1em;
+}
+
+.tab-content {
+  margin-top: 1em;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1em;
+}
+.card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+}
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.fit-content {
+  width: fit-content;
+}
+h2 {
+  margin: 0.3em 0;
 }
