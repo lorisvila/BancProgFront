@@ -12,56 +12,40 @@ import {Card, GPIOModule} from '../../types';
 })
 export class InputOutputComponent {
 
-  selectedTabFromUrl: string | undefined = undefined
-
   constructor(
-	  public MainService: MainService,
-	  public CommandsService: CommandsService,
+	  public mainService: MainService,
+	  public commandsService: CommandsService,
     public route: ActivatedRoute,
     public router: Router
   ) {
-    this.route.fragment.subscribe(fragment => {
-      this.selectedTabFromUrl = fragment
-    })
-    this.MainService.refreshed$.subscribe(() => {
-      if (!this.CommandsService.cardSelected) {
+    this.mainService.refreshed$.subscribe(() => {
+      if (!this.commandsService.cardSelected) {
         this.route.queryParams.subscribe(params => {
           if (params['card']) {
-            this.CommandsService.changeSelectedCardFromString(params['card'])
+            this.commandsService.changeSelectedCardFromString(params['card'])
           }
         });
       }
-      if (!this.CommandsService.moduleSelected) {
+      if (!this.commandsService.moduleSelected) {
         this.route.queryParams.subscribe(params => {
           if (params['module']) {
-            this.CommandsService.changeSelectedModuleFromString(params['module'])
+            this.commandsService.changeSelectedModuleFromString(params['module'])
           }
         });
       }
     })
-  }
-
-
-  changeUrlToTab(event: any) {
-    let tabName = event.detail.selectedKey
-    this.selectedTabFromUrl = tabName
-    this.router.navigate([], {
-      relativeTo: this.route,
-      fragment: tabName,
-      queryParamsHandling: 'merge'
-    });
   }
 
   changeSelectedCardFromEvent(event: any) {
     let cardName: string = ((event as CustomEvent).detail as RadioGroupChangeEventDetail).value
-    this.MainService.addParamToUrl('card', cardName)
-    this.CommandsService.changeSelectedCardFromEvent(event)
+    this.mainService.addParamToUrl('card', cardName)
+    this.commandsService.changeSelectedCardFromEvent(event)
   }
 
   changeSelectedModuleFromEvent(event: any) {
     let moduleName: string = ((event as CustomEvent).detail as RadioGroupChangeEventDetail).value
-    this.MainService.addParamToUrl('module', moduleName)
-    this.CommandsService.changeSelectedModuleFromEvent(event)
+    this.mainService.addParamToUrl('module', moduleName)
+    this.commandsService.changeSelectedModuleFromEvent(event)
   }
 
   trackCard(index: number, obj: Card) {

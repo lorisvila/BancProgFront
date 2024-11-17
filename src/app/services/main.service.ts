@@ -21,7 +21,8 @@ import {Subject} from 'rxjs';
 })
 export class MainService {
 
-	// Global variables
+	/*Global API / App variables*/
+
 	bancConfigurations: BancConfig[]
   actualBancConfiguration: BancConfig
   actualEtats: Etat[]
@@ -30,11 +31,18 @@ export class MainService {
   bancModules: GPIOModule[]
   bancPinout: Pinout[]
   networkDevices: ConfigNetworking[]
+  networkDevicesSubject: Subject<ConfigNetworking[]> = new Subject()
   switchConfiguration: SwitchConfigType
   switchConfigurationSubject: Subject<SwitchConfigType> = new Subject()
 
+  /*App & API Events*/
+
   valuesUpdated$: EventEmitter<string> = new EventEmitter<string>()
   refreshed$: EventEmitter<boolean> = new EventEmitter<boolean>()
+
+  /*Tabs monitoring*/
+
+  selectedTabFromUrl: string | undefined = undefined
 
   constructor(
 	  private communicationService: CommunicationService,
@@ -49,6 +57,11 @@ export class MainService {
     })
     this.communicationService.messageFromWsAPI.subscribe(message => {
       this.handleMessage(message)
+    })
+
+    /*Subscribe to the url and update the Current Tab var*/
+    this.route.fragment.subscribe(fragment => {
+      this.selectedTabFromUrl = fragment
     })
   }
 
@@ -85,6 +98,7 @@ export class MainService {
       }
       case "networkDevicesStatus": {
         this.networkDevices = [...message.data as ConfigNetworking[]]
+        this.networkDevicesSubject.next(message.data)
         break;
       }
       case "allConfigs": {
@@ -135,6 +149,16 @@ export class MainService {
       }
     }
     this.valuesUpdated$.emit(message.dataName)
+  }
+
+  addTabToUrl(event: any) {
+    let tabName = event.detail.selectedKey
+    this.selectedTabFromUrl = tabName
+    this.router.navigate([], {
+      relativeTo: this.route,
+      fragment: tabName,
+      queryParamsHandling: 'merge'
+    });
   }
 
   addParamToUrl(paramater: string, value: string) {

@@ -1,13 +1,16 @@
 <app-page-header pageName="Equipements réseau" [refreshButton]="true"></app-page-header>
 <main>
-  <wcs-tabs align="" selectedIndex="1"> <!--TODO : Add the tab gestion-->
-    <wcs-tab header="Configuration Avancée Switch">
+  <wcs-tabs align="" [selectedKey]="mainService.selectedTabFromUrl" (tabChange)="mainService.addTabToUrl($event)">
+
+    <!--TODO : See if advanced port configuration required for this projectn-->
+    <!--<wcs-tab header="Configuration Avancée Switch">
       <app-advanced-config-switch></app-advanced-config-switch>
-    </wcs-tab>
-    <wcs-tab header="Configuration Switch">
+    </wcs-tab>-->
+
+    <wcs-tab header="Configuration Switch" itemKey="Config">
       <app-simple-config-switch></app-simple-config-switch>
     </wcs-tab>
-    <wcs-tab header="Statut Réseau" itemKey="status">
+    <wcs-tab header="Statut Réseau" itemKey="Status">
       <app-network-status></app-network-status>
     </wcs-tab>
   </wcs-tabs>

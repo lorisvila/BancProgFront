@@ -1,6 +1,6 @@
 <app-page-header pageName="Entrées MESD" [refreshButton]="true" [syncButton]="true"></app-page-header>
 <main>
-  <wcs-tabs align="" [selectedKey]="selectedTabFromUrl" (tabChange)="changeUrlToTab($event)">
+  <wcs-tabs align="" [selectedKey]="mainService.selectedTabFromUrl" (tabChange)="mainService.addTabToUrl($event)">
 
     <!--Tab commandes simplifiées-->
     <wcs-tab header="Commandes simplifiées" item-key="SimpleCommands">
@@ -14,8 +14,8 @@
           <wcs-card-body>
             <div class="table-etats">
               <!--TODO : Replace by the app-value-check component-->
-              @if (MainService.actualEtats) {
-                @for (etat of MainService.actualEtats; track etat.category) {
+              @if (mainService.actualEtats) {
+                @for (etat of mainService.actualEtats; track etat.category) {
                   <div class="table-etats-line">
                     <ng-container *ngIf="etat.actualState">
                       <span class="table-etats-name">{{etat.category}}</span>
@@ -28,7 +28,7 @@
                   </div>
                 }
               }
-              <ng-container *ngIf="!MainService.actualEtats">
+              <ng-container *ngIf="!mainService.actualEtats">
                 <span><wcs-badge class="wcs-danger">Pas d'états...</wcs-badge></span>
               </ng-container>
             </div>
@@ -41,13 +41,13 @@
           </wcs-card-body>
           <wcs-divider></wcs-divider>
           <wcs-card-body>
-            <ng-container *ngIf="MainService.commandsAvailable">
+            <ng-container *ngIf="mainService.commandsAvailable">
               <div class="flex-column">
-                <wcs-button class="wcs-primary" *ngFor="let command of this.MainService.commandsAvailable"
-                            (click)="CommandsService.sendSimpleCommand(command.shortName, $event)">{{command.Name}}</wcs-button>
+                <wcs-button class="wcs-primary" *ngFor="let command of this.mainService.commandsAvailable"
+                            (click)="commandsService.sendSimpleCommand(command.shortName, $event)">{{command.Name}}</wcs-button>
               </div>
             </ng-container>
-            <wcs-badge *ngIf="!MainService.commandsAvailable" class="wcs-danger">Pas de commandes...</wcs-badge>
+            <wcs-badge *ngIf="!mainService.commandsAvailable" class="wcs-danger">Pas de commandes...</wcs-badge>
           </wcs-card-body>
         </wcs-card>
       </div>
@@ -65,36 +65,36 @@
           <wcs-divider></wcs-divider>
 
           <wcs-card-body>
-            <ng-container *ngIf="MainService.bancCards">
-              <wcs-radio-group [value]="CommandsService.cardStringSelected" mode="option"
+            <ng-container *ngIf="mainService.bancCards">
+              <wcs-radio-group [value]="commandsService.cardStringSelected" mode="option"
                                (wcsChange)="changeSelectedCardFromEvent($event)">
-                <wcs-radio *ngFor="let card of MainService.bancCards; trackBy: trackCard"
+                <wcs-radio *ngFor="let card of mainService.bancCards; trackBy: trackCard"
                          [label]="card.cardName" [name]="card.cardName" [value]="card.cardName" mode="option"></wcs-radio>
               </wcs-radio-group>
             </ng-container>
-            <ng-container *ngIf="!MainService.bancCards">
+            <ng-container *ngIf="!mainService.bancCards">
               <wcs-badge class="wcs-danger">Pas de cartes...</wcs-badge>
             </ng-container>
           </wcs-card-body>
 
-          <ng-container *ngIf="CommandsService.cardSelected">
+          <ng-container *ngIf="commandsService.cardSelected">
             <wcs-divider></wcs-divider>
             <wcs-card-body>
               <wcs-grid id="grid-commande-carte" selection-config="none"
-                        [data]="CommandsService.cardSelected.pins" row-id-path="NumberOnCard">
+                        [data]="commandsService.cardSelected.pins" row-id-path="NumberOnCard">
                 <wcs-grid-column name="Nom" id="PinName-card" path="PinName" sort=""></wcs-grid-column>
                 <wcs-grid-column name="Numéro" id="NumberOnCard-card" path="NumberOnCard" sort=""></wcs-grid-column>
                 <wcs-grid-column name="Etat Relu" id="state-card" custom-cells="true"></wcs-grid-column>
                 <wcs-grid-column name="Commande" id="command-card" custom-cells="true"></wcs-grid-column>
 
-                <wcs-grid-custom-cell column-Id="state-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">
+                <wcs-grid-custom-cell column-Id="state-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of commandsService.cardSelected.pins">
                   <wcs-badge *ngIf="pin.realState" class="wcs-success">1</wcs-badge>
                   <wcs-badge *ngIf="!pin.realState" class="wcs-warning">0</wcs-badge>
                 </wcs-grid-custom-cell>
 
-                <wcs-grid-custom-cell column-Id="command-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of CommandsService.cardSelected.pins">
+                <wcs-grid-custom-cell column-Id="command-card" [rowId]="pin.NumberOnCard" *ngFor="let pin of commandsService.cardSelected.pins">
                   <wcs-switch name="switch-id" label-alignment="center" [checked]="pin.state"
-                              (wcsChange)="CommandsService.sendCardPinToggle(pin.NumberOnCard, $event)"></wcs-switch>
+                              (wcsChange)="commandsService.sendCardPinToggle(pin.NumberOnCard, $event)"></wcs-switch>
                 </wcs-grid-custom-cell>
               </wcs-grid>
             </wcs-card-body>
@@ -114,14 +114,14 @@
           <wcs-divider></wcs-divider>
 
           <wcs-card-body>
-            <ng-container *ngIf="MainService.bancModules">
-              <wcs-radio-group [value]="CommandsService.moduleNumberSelected" mode="option"
+            <ng-container *ngIf="mainService.bancModules">
+              <wcs-radio-group [value]="commandsService.moduleNumberSelected" mode="option"
                                (wcsChange)="changeSelectedModuleFromEvent($event)">
-                <wcs-radio *ngFor="let card of MainService.bancModules; trackBy: trackModule"
+                <wcs-radio *ngFor="let card of mainService.bancModules; trackBy: trackModule"
                            [label]="card.API_Address" [name]="card.API_Address" [value]="card.API_Address" mode="option"></wcs-radio>
               </wcs-radio-group>
             </ng-container>
-            <ng-container *ngIf="!MainService.bancModules">
+            <ng-container *ngIf="!mainService.bancModules">
               <wcs-badge class="wcs-danger">Pas de modules...</wcs-badge>
             </ng-container>
           </wcs-card-body>
@@ -129,9 +129,9 @@
           <wcs-divider></wcs-divider>
 
 
-          <ng-container *ngIf="CommandsService.moduleSelected && MainService.bancPinout">
+          <ng-container *ngIf="commandsService.moduleSelected && mainService.bancPinout">
             <wcs-card-body>
-              <ng-container *ngFor="let register of CommandsService.moduleSelected.registers; index as i">
+              <ng-container *ngFor="let register of commandsService.moduleSelected.registers; index as i">
                 <b>Register n°{{i}}</b> : {{("00000000"+register.toString(2)).slice(-8)}} | {{register}}
                 <br>
               </ng-container>
@@ -141,7 +141,7 @@
 
             <wcs-card-body>
               <wcs-grid id="grid-commande-module" selection-config="none"
-                        [data]="CommandsService.compiledModuleData" row-id-path="pin">
+                        [data]="commandsService.compiledModuleData" row-id-path="pin">
                 <wcs-grid-column name="Pin" id="pin-module" path="pin" sort=""></wcs-grid-column>
                 <wcs-grid-column name="Module" id="module-num-module" path="module" sort=""></wcs-grid-column>
                 <wcs-grid-column name="Etat" id="state-module" path="state"></wcs-grid-column>
@@ -149,10 +149,10 @@
                 <wcs-grid-column name="HEX Reg. IODIR" id="register-IODIR-address-module" path="IODIR_register"></wcs-grid-column>
                 <wcs-grid-column name="Commandes" id="commands-module" customCells=""></wcs-grid-column>
 
-                <wcs-grid-custom-cell column-Id="commands-module" [rowId]="pin.pin" *ngFor="let pin of CommandsService.compiledModuleData"
+                <wcs-grid-custom-cell column-Id="commands-module" [rowId]="pin.pin" *ngFor="let pin of commandsService.compiledModuleData"
                                       style="display: flex; flex-flow: row wrap; gap: 1em">
                   <wcs-switch name="switch-id" label-alignment="center" [checked]="pin.state"
-                              (wcsChange)="CommandsService.sendModulePinToggle(pin.pin, $event)"></wcs-switch>
+                              (wcsChange)="commandsService.sendModulePinToggle(pin.pin, $event)"></wcs-switch>
                 </wcs-grid-custom-cell>
               </wcs-grid>
             </wcs-card-body>
