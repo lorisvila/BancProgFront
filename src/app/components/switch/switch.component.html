@@ -1,0 +1,23 @@
+<div class="switch-grid-container" [style.grid-template-areas]="networkingService.stringArrayGridTemplateAreas">
+  @for (port of networkingService.mainService.switchConfiguration?.ports; track port.port) {
+    <app-switch-port [port]="port" [allowConfiguration]="allowConfiguration"></app-switch-port>
+  }
+</div>
+
+<!--TODO : Remove this old section  / See if gonna be used in the future to control each port configuration-->
+<wcs-modal
+  [show]="networkingService.showModalPortConfig"
+  size="m">
+  <div slot="header">Configuration du port <wcs-badge class="wcs-warning" style="font-size: 0.8em">{{networkingService.modalPortConfigFormModel?.portNum}}</wcs-badge></div>
+
+  <form [formGroup]="networkingService.modalPortConfigForm">
+    <formly-form [form]="networkingService.modalPortConfigForm"
+                 [model]="networkingService.modalPortConfigFormModel"
+                 [fields]="modalPortConfigFormFields"></formly-form>
+  </form>
+
+  <div slot="actions" class="flex-row">
+    <wcs-button mode="stroked" (click)="networkingService.showModalPortConfig = false">Annuler</wcs-button>
+    <wcs-button>OK</wcs-button>
+  </div>
+</wcs-modal>

@@ -1,0 +1,22 @@
+<div class="tab-content">
+  <wcs-card>
+    <wcs-card-body class="card-header">
+      <wcs-mat-icon icon="router"></wcs-mat-icon>
+      <h2>Configuration des ports Switch</h2>
+    </wcs-card-body>
+    <wcs-divider></wcs-divider>
+
+    <app-value-checker [variable]="mainService.switchConfiguration" variableName="Configuration Switch" [needsMargin]="true">
+      <wcs-card-body class="card-content">
+        <div class="flex-column">
+          <div class="flex-row">Type de switch :<wcs-badge class="wcs-info">{{networkingService.mainService.switchConfiguration?.type}}</wcs-badge></div>
+          <div class="flex-row">Statut connexion API / Switch :<wcs-badge [class]="networkingService.mainService.switchConfiguration?.connection ? 'wcs-success' : 'wcs-danger'">{{networkingService.mainService.switchConfiguration?.connection ? "Connecté" : "Déconnecté"}}</wcs-badge></div>
+        </div>
+      </wcs-card-body>
+      <wcs-divider></wcs-divider>
+      <wcs-card-body class="card-content">
+        <app-switch [allowConfiguration]="true"></app-switch>
+      </wcs-card-body>
+    </app-value-checker>
+  </wcs-card>
+</div>

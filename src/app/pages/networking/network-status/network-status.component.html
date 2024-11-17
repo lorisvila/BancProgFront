@@ -1,0 +1,54 @@
+<div class="tab-content">
+  <wcs-card>
+    <wcs-card-body class="card-header">
+      <wcs-mat-icon icon="interests"></wcs-mat-icon>
+      <h2>Statut des équipements réseau <i>Banc Bischheim</i></h2>
+      <wcs-button id="btn-toggle-name" mode="stroked" (click)="toggleDeviceIp($event)">Afficher {{showDeviceIp ? 'Nom' : 'IP'}}</wcs-button>
+    </wcs-card-body>
+    <wcs-divider></wcs-divider>
+    <wcs-card-body>
+      <app-value-checker [variable]="mainService.networkDevices" variableName="Equipements réseau">
+        <div class="devicesGroupCard">
+          @for (deviceGroup of mainService.networkDevices; track deviceGroup) {
+            <div class="diagram-banc">
+              <wcs-badge class="wcs-primary">{{deviceGroup.des}}</wcs-badge>
+              <div class="devices-div diagram-etage">
+                @for (device of deviceGroup.addresses; track device.name) {
+                  <div [class]="device.IsAlive ? 'device-div connected-device' : 'device-div disconnected-device'"
+                       (click)="networkingService.openDeviceModal(deviceGroup, device)">
+                    <wcs-mat-icon [icon]="device.IsAlive ? 'wifi' : 'wifi_off'"></wcs-mat-icon>
+                    <span *ngIf="showDeviceIp">{{device.IP}}</span>
+                    <span *ngIf="!showDeviceIp">{{device.name}}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </app-value-checker>
+    </wcs-card-body>
+  </wcs-card>
+</div>
+
+<wcs-modal [show]="networkingService.showModalDeviceInformations">
+  <div slot="header" class="header-modal">Informations sur l'équipement</div>
+  <ng-container *ngIf="networkingService.dataModalDeviceInformations">
+    <wcs-grid [data]="networkingService.dataModalDeviceInformations" selection-config="none" >
+      <wcs-grid-column path="name" name="Paramètre"></wcs-grid-column>
+      <wcs-grid-column path="value" name="Valeur"></wcs-grid-column>
+    </wcs-grid>
+    <div class="flex-row services-div">
+      <ng-container *ngFor="let service of networkingService.selectedDevice.services">
+        <wcs-button *ngIf="service.protocol == 'http'" [href]="service.url" target="_blank">
+          {{service.name}}
+        </wcs-button>
+      </ng-container>
+    </div>
+  </ng-container>
+  <wcs-badge *ngIf="!networkingService.dataModalDeviceInformations" class="wcs-danger">
+    Aucune données à afficher...
+  </wcs-badge>
+  <div slot="actions">
+    <wcs-button (click)="networkingService.showModalDeviceInformations = false">Fini</wcs-button>
+  </div>
+</wcs-modal>

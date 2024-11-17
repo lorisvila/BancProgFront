@@ -1,0 +1,11 @@
+<app-page-header pageName="Mise à jour S.DOT" [refreshButton]="true"></app-page-header>
+<main>
+  <wcs-tabs align="" [selectedKey]="mainService.selectedTabFromUrl" (tabChange)="mainService.addTabToUrl($event)">
+    <wcs-tab header="Fichiers" itemKey="Files">
+      <app-files></app-files>
+    </wcs-tab>
+    <wcs-tab header="Equipements" itemKey="Devices">
+      HUG
+    </wcs-tab>
+  </wcs-tabs>
+</main>

@@ -1,0 +1,11 @@
+<wcs-action-bar gutter="true">
+  {{ pageName }}
+  <div slot="actions" class="actions">
+    @if (syncButton) {
+      <app-sync-button></app-sync-button>
+    }
+    @if (refreshButton) {
+      <app-refresh-button *ngIf="refreshButton"></app-refresh-button>
+    }
+  </div>
+</wcs-action-bar>

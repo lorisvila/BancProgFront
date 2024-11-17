@@ -1,0 +1,42 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: var(--wcs-light);
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  padding: 0.5em;
+}
+
+.port-display {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.hide-class {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+wcs-button {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+span {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0.2em;
+  font-size: 1.3em;
+}
+
+.container:hover wcs-button {
+  opacity: 1;
+}
+.container:hover .hide-class {
+  opacity: 0;
+}

@@ -1,0 +1,7 @@
+.switch-grid-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 columns */
+  grid-auto-rows: min-content; /* Row height adjusts to content */
+  gap: 10px; /* Space between grid items */
+  overflow-x: auto;
+}

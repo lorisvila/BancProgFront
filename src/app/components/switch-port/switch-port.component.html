@@ -1,0 +1,15 @@
+<div class="container">
+  <div [class]="allowConfiguration ? 'port-display hide-class' : 'port-display'">
+    <span><wcs-mat-icon icon="settings_input_svideo"></wcs-mat-icon>{{port.portNum}}</span>
+    @if (port.device) {
+      <wcs-badge [class]="port.link ? 'wcs-success' : 'wcs-danger'">{{ port.device }}</wcs-badge>
+    } @else {
+      <wcs-badge class="wcs-primary"><wcs-mat-icon icon="power_off" size="s"></wcs-mat-icon></wcs-badge>
+    }
+  </div>
+  @if (allowConfiguration) {
+    <wcs-button class="wcs-warning" mode="plain" [disabled]="!port.configurable" (click)="networkingService.showModalPortConfig = true" (click)="networkingService.modalPortConfigFormModel = port">
+      <wcs-mat-icon icon="edit"></wcs-mat-icon>Configurer
+    </wcs-button>
+  }
+</div>

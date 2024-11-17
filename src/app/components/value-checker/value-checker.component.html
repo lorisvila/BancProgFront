@@ -1,0 +1,5 @@
+@if (variable) {
+  <ng-content></ng-content>
+} @else {
+  <wcs-badge [class]="needsMargin ? 'wcs-danger needsMargin' : 'wcs-danger'">Pas de données : {{variableName}}</wcs-badge>
+}

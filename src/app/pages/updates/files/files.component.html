@@ -1,0 +1,21 @@
+<div class="tab-content">
+  <wcs-card>
+    <wcs-card-body class="card-header"><wcs-mat-icon icon="deployed_code_update"></wcs-mat-icon><h2>Fichiers téléversés</h2></wcs-card-body>
+    <wcs-divider></wcs-divider>
+    <wcs-card-body>
+      <form [formGroup]="updatingService.fileForm">
+        <formly-form [form]="updatingService.fileForm" [fields]="fields" [model]="updatingService.fileFormModel"></formly-form>
+      </form>
+    </wcs-card-body>
+    <wcs-divider></wcs-divider>
+    <wcs-card-body>
+      <wcs-grid selection-config="none" [data]="updatingService.tempVersionsFiles">
+        <wcs-grid-column name="Fichier" path="file" sort=""></wcs-grid-column>
+        <wcs-grid-column name="Version" path="version" sort="" sort-order=""></wcs-grid-column>
+        <wcs-grid-column name="Equipement" path="device" sort=""></wcs-grid-column>
+        <wcs-grid-column name="Editer" path="edit" customCells=""></wcs-grid-column>
+
+      </wcs-grid>
+    </wcs-card-body>
+  </wcs-card>
+</div>
